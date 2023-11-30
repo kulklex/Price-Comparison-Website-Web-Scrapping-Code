@@ -5,8 +5,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.pmw.tinylog.Logger;
-import org.webscraping.scrapers.BackMarketScraper;
-import org.webscraping.scrapers.EBayScraper;
+import org.webscraping.scrapers.*;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
@@ -33,9 +32,20 @@ public class Main {
                 System.err.println("SessionFactory creation failed." + ex);
             }
 
-        EBayScraper ebs = new EBayScraper(sessionFactory);
-        ebs.scrape();
+        ArgosScraper ags = new ArgosScraper(sessionFactory);
+        ags.start();
+
 //        BackMarketScraper bms = new BackMarketScraper(sessionFactory);
-//        bms.scrape();
+//        bms.start();
+
+//        CurrysScraper crs = new CurrysScraper(sessionFactory);
+//        crs.start();
+
+
+//        EBayScraper ebs = new EBayScraper(sessionFactory);
+//        ebs.start();
+
+//        JohnLewisScraper jls = new JohnLewisScraper(sessionFactory);
+//        jls.start();
     }
 }
