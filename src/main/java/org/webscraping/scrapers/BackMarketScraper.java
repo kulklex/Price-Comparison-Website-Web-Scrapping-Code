@@ -10,7 +10,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BackMarketScraper {
+public class BackMarketScraper extends Thread{
 
     public SessionFactory sessionFactory;
 
@@ -18,71 +18,76 @@ public class BackMarketScraper {
         this.sessionFactory = sessionFactory;
     }
 
-    public void scrape() throws InterruptedException {
+
+    @Override
+    public void run() {
         FirefoxOptions options = new FirefoxOptions();
         System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
         options.setHeadless(true);
 
-        // Creating an instance of the web driver
-        WebDriver driver = new FirefoxDriver(options);
+        int page = 1;
 
-        // creating a pause instance
-//        WebDriverWait pause = new WebDriverWait(driver, 45);
-
-
-        driver.get("https://www.backmarket.co.uk/en-gb/search?q=earbuds");
-//        pause.until(ExpectedConditions.elementToBeClickable(By.xpath("")));
-
-        try {
-            Thread.sleep(10000);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+       do {
+           WebDriver driver = new FirefoxDriver(options);
 
 
-        List<WebElement> earbudsList = driver.findElements(By.xpath("//div[@class='productCard']//child::a"));
-        List<String> earbudsUrl = new ArrayList<>();
+           driver.get("https://www.backmarket.co.uk/en-gb/search?q=earphones&page="+page);
 
-        for ( WebElement earbuds : earbudsList) {
-            earbudsUrl.add(earbuds.getAttribute("href"));
-        }
+           try {
+               Thread.sleep(1000);
+           } catch (Exception ex) {
+               ex.printStackTrace();
+           }
 
-//        System.out.println(earbudsUrl.size());
 
-        for (String earbudUrl: earbudsUrl) {
-//            System.out.println(earbudUrl);
-            driver.navigate().to(earbudUrl);
+           List<WebElement> earbudsList = driver.findElements(By.xpath("//div[@class='productCard']//child::a"));
 
-            String imageUrl = driver.findElement(By.xpath("//li[@class='list-none w-full flex justify-center focus:outline-none']//descendant::img"))
-                    .getAttribute("src");
-//            System.out.println(imageUrl);
+           if (earbudsList.isEmpty()) {
+               break;
+           }
 
-            String name = driver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
-                    .getAttribute("innerText").split(" -")[0];
-            System.out.println(name);
+           List<String> earbudsUrl = new ArrayList<>();
 
-            String price = driver.findElement(By.xpath("//div[@data-test='normal-price']"))
-                    .getAttribute("innerText");
-//            System.out.println(price);
+           for ( WebElement earbuds : earbudsList) {
+               earbudsUrl.add(earbuds.getAttribute("href"));
+           }
 
-            String description = driver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
-                    .getAttribute("innerText");
+
+           for (String earbudUrl: earbudsUrl) {
+               WebDriver pageDriver = new FirefoxDriver(options);
+               pageDriver.get(earbudUrl);
+
+               try {
+                   Thread.sleep(1000);
+               } catch (Exception ex) {
+                   ex.printStackTrace();
+               }
+
+               String imageUrl = pageDriver.findElement(By.xpath("//li[@class='list-none w-full flex justify-center focus:outline-none']//descendant::img"))
+                       .getAttribute("src");
+            System.out.println(imageUrl);
+
+               String name = pageDriver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
+                       .getAttribute("innerText");
+
+
+               String priceString = pageDriver.findElement(By.xpath("//div[@data-test='normal-price']"))
+                       .getAttribute("innerText").substring(1);
+               Float price = Float.valueOf(priceString);
+
+
+
+               String description = pageDriver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
+                       .getAttribute("innerText");
 //            System.out.println(description);
 
-            String brand = driver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
-                    .getAttribute("innerText").split(" ")[0];
-//            System.out.println(brand);
 
+               pageDriver.quit();
 
-            String color = driver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
-                    .getAttribute("innerText").split(" -")[1];
-//            System.out.println(color);
+           }
 
-//            String size =
-
-            Thread.sleep(5000);
-        }
-
-        driver.quit();
+           driver.quit();
+           page++;
+       } while (true);
     }
 }
