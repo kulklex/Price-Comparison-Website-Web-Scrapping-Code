@@ -10,46 +10,83 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EBayScraper {
+public class EBayScraper extends Thread{
 
 
     public SessionFactory sessionFactory;
 
-    public  EBayScraper (SessionFactory sessionFactory) {
+    public  EBayScraper (SessionFactory sessionFactory)
+    {
         this.sessionFactory = sessionFactory;
     }
-    public void scrape() throws InterruptedException {
+
+    @Override
+    public void run() {
         FirefoxOptions options = new FirefoxOptions();
         System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
         options.setHeadless(true);
 
-        // Creating an instance of the web driver
-        WebDriver driver = new FirefoxDriver(options);
+        int page = 1;
+
+        do {
+            // Creating an instance of the web driver
+            WebDriver driver = new FirefoxDriver(options);
 
 
-        driver.get("https://www.ebay.co.uk/sch/i.html?_from=R40&_nkw=earbuds+bluetooth&_sacat=0&LH_TitleDesc=0&rt=nc&LH_PrefLoc=1");
+            driver.get("https://www.ebay.co.uk/sch/i.html?_from=R40&_nkw=earbuds+bluetooth+wireless&_sacat=0&LH_TitleDesc=0&Brand=Sony%7CApple%7CJBL%7CSamsung%7CTws&LH_BIN=1&_dcat=112529&LH_PrefLoc=1&_sop=16&imm=1&_pgn="+page);
 
 
-        try {
-            Thread.sleep(3000);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+            try {
+                Thread.sleep(3000);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
 
-        List<WebElement> earbudsList = driver.findElements(By.xpath("//ul[@class='srp-results srp-list clearfix']//child::li//descendant::a[@class='s-item__link']"));
+            List<WebElement> earbudsList = driver.findElements(By.xpath("//ul[@class='srp-results srp-list clearfix']//child::li//descendant::a[@class='s-item__link']"));
+
+            if (earbudsList.isEmpty() || page >= 4) {
+                break;
+            }
+
+            List<String> earbudsUrl = new ArrayList<>();
+
+            for (WebElement earbuds : earbudsList) {
+                earbudsUrl.add(earbuds.getAttribute("href"));
+            }
+
+            for(String earbudUrl : earbudsUrl) {
+                WebDriver pageDriver = new FirefoxDriver(options);
+                pageDriver.get(earbudUrl);
+
+                try {
+                    Thread.sleep(3000);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                String imageUrl = pageDriver.findElement(By.xpath("//img[@class='ux-image-magnify__image--original']")).getAttribute("src");
 
 
-        List<String> earbudsUrl = new ArrayList<>();
-
-        for (WebElement earbuds : earbudsList) {
-            earbudsUrl.add(earbuds.getAttribute("href"));
-            System.out.println(earbudsUrl);
-        }
+                String name = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
 
 
-//        System.out.println(earbudsList.size());
+                String description = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
 
-        driver.quit();
+                String priceString = pageDriver.findElement(By.xpath("//div[@class='x-price-primary']//child::span"))
+                        .getText().split(" ")[0].substring(1);
+                Float price = Float.valueOf(priceString);
+
+               System.out.println("Name: "+name);
+                System.out.println("Price: "+price);
+                System.out.println("Image: "+imageUrl);
+                System.out.println("Description: "+description);
+                pageDriver.quit();
+
+            }
+
+            driver.quit();
+            page++;
+        } while (true);
     }
 }

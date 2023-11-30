@@ -10,30 +10,30 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrysScraper {
+public class CurrysScraper extends Thread{
 
     public SessionFactory sessionFactory;
 
     public  CurrysScraper (SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-    public void scrape() {
+
+    @Override
+    public void run() {
         FirefoxOptions options = new FirefoxOptions();
         System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
+
+        /*Set Headless mode */
         options.setHeadless(true);
 
-        // Creating an instance of the web driver
         WebDriver driver = new FirefoxDriver(options);
 
-        // creating a pause instance
-//        WebDriverWait pause = new WebDriverWait(driver, 45);
 
-
-        driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/in-ear-headphones?searchTerm=earbuds");
-//        pause.until(ExpectedConditions.elementToBeClickable(By.xpath("")));
+//        driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/wireless-earbuds?searchTerm=wireless%20earbuds");
+        driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/wireless-earbuds?pmin=60.0&pmax=499.0");
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1000);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -47,14 +47,35 @@ public class CurrysScraper {
         }
 
         for (String earbudUrl : earbudsUrl) {
-            driver.navigate().to(earbudUrl);
+            WebDriver pageDriver = new FirefoxDriver(options);
+            pageDriver.get(earbudUrl);
+            try {
+                Thread.sleep(1000);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
-            String imageUrl = driver.findElement(By.xpath("//*[contains(concat( \" \", @class, \" \" ), concat( \" \", \"img-fluid\", \" \" ))]"))
+            String imageUrl = pageDriver.findElement(By.xpath("//img[@itemprop='image']"))
                     .getAttribute("src");
-            System.out.println(imageUrl);
+
+
+            String[] splittedArray = pageDriver.findElement(By.xpath("//h1[@class='product-name']"))
+                    .getAttribute("innerText").split(" - ");
+            String name = splittedArray[0];
+            String color = splittedArray[splittedArray.length - 1];
+
+            String priceString = pageDriver.findElement(By.xpath("//div[@class='prices']//descendant::span[@class='value']"))
+                    .getAttribute("content");
+            Float price = Float.valueOf(priceString);
+
+            System.out.println("Name: "+name);
+            System.out.println("Price: "+price);
+            System.out.println("Image: "+imageUrl);
+            System.out.println("Color: "+color);
+            pageDriver.quit();
+
         }
-
-
+        System.out.println(earbudsList.size());
         driver.quit();
     }
 }

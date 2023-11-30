@@ -65,7 +65,6 @@ public class BackMarketScraper extends Thread{
 
                String imageUrl = pageDriver.findElement(By.xpath("//li[@class='list-none w-full flex justify-center focus:outline-none']//descendant::img"))
                        .getAttribute("src");
-            System.out.println(imageUrl);
 
                String name = pageDriver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
                        .getAttribute("innerText");
@@ -79,9 +78,11 @@ public class BackMarketScraper extends Thread{
 
                String description = pageDriver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
                        .getAttribute("innerText");
-//            System.out.println(description);
 
-
+               System.out.println("Name: "+name);
+               System.out.println("Price: "+price);
+               System.out.println("Image: "+imageUrl);
+               System.out.println("Description: "+description);
                pageDriver.quit();
 
            }
