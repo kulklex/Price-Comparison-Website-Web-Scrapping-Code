@@ -1,40 +1,98 @@
 package org.webscraping.scrapers;
 
+import org.hibernate.SessionFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AmazonScraper {
+public class JohnLewisScraper extends Thread{
 
+    public SessionFactory sessionFactory;
 
-    public void scrape() {
+    public JohnLewisScraper(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public void run() {
         FirefoxOptions options = new FirefoxOptions();
         System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
         options.setHeadless(true);
 
-        // Creating an instance of the web driver
-        WebDriver driver = new FirefoxDriver(options);
 
-        driver.get("https://www.amazon.co.uk/ear-buds/s?k=ear+buds");
+        do {
+            WebDriver driver = new FirefoxDriver(options);
 
-        try {
-            Thread.sleep(3000);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+            driver.get("https://www.johnlewis.com/search?search-term=earbuds&sortBy=popularity&chunk=4");
+
+            try {
+                Thread.sleep(1000);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
 
+            List<WebElement> earbudsList = driver.findElements(By.xpath("//div[@class='product-card_c-product-card__product-details__QLyYh']//child::a"));
 
-//        List<WebElement> earbudsList = driver.findElements(By.className("s-result-list"));
-        List<WebElement> earbudsList = driver.findElements(By.xpath("//body/div[@id='a-page']/div[@id='search']/div[@class='s-desktop-width-max s-desktop-content s-wide-grid-style-t1 s-opposite-dir s-wide-grid-style sg-row']/div[@class='sg-col-20-of-24 s-matching-dir sg-col-16-of-20 sg-col sg-col-8-of-12 sg-col-12-of-16']/div[@class='sg-col-inner']/span[@class='rush-component s-latency-cf-section']/div[@class='s-main-slot s-result-list s-search-results sg-row']/div"));
-        for ( WebElement earbuds : earbudsList) {
-            System.out.println(earbuds.getText());
-        }
+            if (earbudsList.isEmpty()) {
+                break;
+            }
 
-        driver.quit();
+            List<String> earbudsUrl = new ArrayList<>();
+
+            for ( WebElement earbuds : earbudsList) {
+                earbudsUrl.add(earbuds.getAttribute("href"));
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//
+//
+//                String brand = driver.findElement(By.className("product-card_c-product-card__title__vbF7K")).getText();
+//                System.out.println("Brand: "+brand);
+            }
+
+
+            for (String earbudUrl : earbudsUrl) {
+                WebDriver pageDriver = new FirefoxDriver(options);
+
+                pageDriver.get(earbudUrl);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                String imageUrl = pageDriver.findElement(By.xpath("//img[@class='GalleryImageElement_galleryImage__qeVXg GalleryImageElement_galleryImage__desktop__qP1_O']"))
+                        .getAttribute("src");
+
+                String priceString = pageDriver.findElement(By.xpath("//div[@class='Layout_desktopHeader__WUCH3']//descendant::span[@data-testid='product:price']"))
+                        .getText().substring(1);
+                Float price = Float.valueOf(priceString);
+
+
+                String name = pageDriver.findElement(By.xpath("//div[@class='Layout_desktopHeader__WUCH3']//descendant::h1")).getText();
+
+
+                String description = pageDriver.findElement(By.className("ProductAccordion_container__I7B_E")).getAttribute("innerHTML");
+
+
+                System.out.println("Name: "+name);
+                System.out.println("Price: "+price);
+                System.out.println("Image: "+imageUrl);
+                System.out.println("Description: "+description);
+                pageDriver.quit();
+
+            }
+
+            driver.quit();
+        } while (true);
     }
 }
