@@ -29,7 +29,6 @@ public class CurrysScraper extends Thread{
         WebDriver driver = new FirefoxDriver(options);
 
 
-//        driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/wireless-earbuds?searchTerm=wireless%20earbuds");
         driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/wireless-earbuds?pmin=60.0&pmax=499.0");
 
         try {
@@ -61,8 +60,15 @@ public class CurrysScraper extends Thread{
 
             String[] splittedArray = pageDriver.findElement(By.xpath("//h1[@class='product-name']"))
                     .getAttribute("innerText").split(" - ");
+
             String name = splittedArray[0];
+
             String color = splittedArray[splittedArray.length - 1];
+
+            String[] brandArray = pageDriver.findElement(By.xpath("//h1[@class='product-name']"))
+                    .getText().split(" ");
+
+            String brand = brandArray[0].toUpperCase();
 
             String priceString = pageDriver.findElement(By.xpath("//div[@class='prices']//descendant::span[@class='value']"))
                     .getAttribute("content");
@@ -72,6 +78,7 @@ public class CurrysScraper extends Thread{
             System.out.println("Price: "+price);
             System.out.println("Image: "+imageUrl);
             System.out.println("Color: "+color);
+            System.out.println("Brand: "+brand);
             pageDriver.quit();
 
         }

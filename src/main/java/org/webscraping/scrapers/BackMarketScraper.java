@@ -72,17 +72,22 @@ public class BackMarketScraper extends Thread{
 
                String priceString = pageDriver.findElement(By.xpath("//div[@data-test='normal-price']"))
                        .getAttribute("innerText").substring(1);
-               Float price = Float.valueOf(priceString);
 
+               Float price = Float.valueOf(priceString);
 
 
                String description = pageDriver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
                        .getAttribute("innerText");
 
+               String[] brandArray = name.split(" ");
+
+               String brand = brandArray[0].toUpperCase();
+
                System.out.println("Name: "+name);
                System.out.println("Price: "+price);
                System.out.println("Image: "+imageUrl);
                System.out.println("Description: "+description);
+               System.out.println("Brand: "+brand);
                pageDriver.quit();
 
            }

@@ -60,14 +60,28 @@ public class ArgosScraper extends Thread {
                 }
 
 
-                String name = pageDriver.findElement(By.className("Namestyles__Main-sc-269llv-1")).findElement(By.tagName("span")).getText();
-                Float price = Float.valueOf(pageDriver.findElement(By.className("Pricestyles__Li-sc-1oev7i-0")).getAttribute("content"));
-                String description = pageDriver.findElement(By.className("product-description-content-text")).getAttribute("innerHTML");
-                String imageUrl = "https:" + pageDriver.findElement(By.className("MediaGallerystyles__ImageWrapper-sc-1jwueuh-2")).findElement(By.tagName("source")).getAttribute("srcset");
+                String name = pageDriver.findElement(By.className("Namestyles__Main-sc-269llv-1"))
+                        .findElement(By.tagName("span")).getText();
+
+                Float price = Float.valueOf(pageDriver.findElement(By.className("Pricestyles__Li-sc-1oev7i-0"))
+                        .getAttribute("content"));
+
+                String description = pageDriver.findElement(By.className("product-description-content-text"))
+                        .getAttribute("innerHTML");
+
+                String imageUrl = "https:" + pageDriver.findElement(By.className("MediaGallerystyles__ImageWrapper-sc-1jwueuh-2")).findElement(By.tagName("source"))
+                        .getAttribute("srcset");
+
+                String[] brandArray = name.split(" ");
+
+                String brand = brandArray[0].toUpperCase();
+
+
                 System.out.println("Name: "+name);
                 System.out.println("Price: "+price);
                 System.out.println("Image: "+imageUrl);
                 System.out.println("Description: "+description);
+                System.out.println("Brand: "+brand);
                 pageDriver.quit();
             }
             driver.quit();

@@ -75,12 +75,18 @@ public class EBayScraper extends Thread{
 
                 String priceString = pageDriver.findElement(By.xpath("//div[@class='x-price-primary']//child::span"))
                         .getText().split(" ")[0].substring(1);
+
                 Float price = Float.valueOf(priceString);
 
-               System.out.println("Name: "+name);
+                String[] brandArray = name.split(" ");
+
+                String brand = brandArray[0].toUpperCase();
+
+                System.out.println("Name: "+name);
                 System.out.println("Price: "+price);
                 System.out.println("Image: "+imageUrl);
                 System.out.println("Description: "+description);
+                System.out.println("Brand: "+brand);
                 pageDriver.quit();
 
             }

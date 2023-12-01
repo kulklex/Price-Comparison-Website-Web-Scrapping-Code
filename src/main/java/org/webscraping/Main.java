@@ -32,20 +32,9 @@ public class Main {
                 System.err.println("SessionFactory creation failed." + ex);
             }
 
-//        ArgosScraper ags = new ArgosScraper(sessionFactory);
-//        ags.start();
-
-//        BackMarketScraper bms = new BackMarketScraper(sessionFactory);
-//        bms.start();
-
-//        CurrysScraper crs = new CurrysScraper(sessionFactory);
-//        crs.start();
+        Scrapper scrapper = new Scrapper(sessionFactory);
+        scrapper.scrape();
 
 
-//        EBayScraper ebs = new EBayScraper(sessionFactory);
-//        ebs.start();
-
-        JohnLewisScraper jls = new JohnLewisScraper(sessionFactory);
-        jls.start();
     }
 }

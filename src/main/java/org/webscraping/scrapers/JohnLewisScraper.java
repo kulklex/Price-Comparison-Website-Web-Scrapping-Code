@@ -47,15 +47,6 @@ public class JohnLewisScraper extends Thread{
 
             for ( WebElement earbuds : earbudsList) {
                 earbudsUrl.add(earbuds.getAttribute("href"));
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//
-//
-//                String brand = driver.findElement(By.className("product-card_c-product-card__title__vbF7K")).getText();
-//                System.out.println("Brand: "+brand);
             }
 
 
@@ -75,6 +66,7 @@ public class JohnLewisScraper extends Thread{
 
                 String priceString = pageDriver.findElement(By.xpath("//div[@class='Layout_desktopHeader__WUCH3']//descendant::span[@data-testid='product:price']"))
                         .getText().substring(1);
+
                 Float price = Float.valueOf(priceString);
 
 
@@ -83,11 +75,17 @@ public class JohnLewisScraper extends Thread{
 
                 String description = pageDriver.findElement(By.className("ProductAccordion_container__I7B_E")).getAttribute("innerHTML");
 
+                String[] brandArray = pageDriver.findElement(By.xpath("//li[@class='breadcrumbs-carousel--brand-item  breadcrumbs-carousel--brand-item-last']"))
+                        .getText().split(" ");
+
+                String brand = brandArray[brandArray.length - 1].toUpperCase();
+
 
                 System.out.println("Name: "+name);
                 System.out.println("Price: "+price);
                 System.out.println("Image: "+imageUrl);
                 System.out.println("Description: "+description);
+                System.out.println("Brand: "+brand);
                 pageDriver.quit();
 
             }
