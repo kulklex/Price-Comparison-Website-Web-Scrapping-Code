@@ -1,11 +1,12 @@
 package org.webscraping.scrapers;
 
-import org.hibernate.SessionFactory;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.webscraping.ProductDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +14,10 @@ import java.util.List;
 public class EBayScraper extends Thread{
 
 
-    public SessionFactory sessionFactory;
+    public ProductDao productDao;
 
-    public  EBayScraper (SessionFactory sessionFactory)
-    {
-        this.sessionFactory = sessionFactory;
+    public  EBayScraper (ProductDao productDao) {
+        this.productDao = productDao;
     }
 
     @Override
@@ -68,8 +68,10 @@ public class EBayScraper extends Thread{
                 String imageUrl = pageDriver.findElement(By.xpath("//img[@class='ux-image-magnify__image--original']")).getAttribute("src");
 
 
-                String name = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
+                String dataToSplit = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
 
+                String[] nameArray = dataToSplit.split("-");
+                String name = nameArray[0];
 
                 String description = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
 
@@ -78,7 +80,7 @@ public class EBayScraper extends Thread{
 
                 Float price = Float.valueOf(priceString);
 
-                String[] brandArray = name.split(" ");
+                String[] brandArray = dataToSplit.split(" ");
 
                 String brand = brandArray[0].toUpperCase();
 

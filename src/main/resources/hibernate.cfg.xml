@@ -3,18 +3,23 @@
 <hibernate-configuration>
   <session-factory>
 
+    <!-- Database Properties -->
     <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost/price_comparison?serverTimezone=UTC</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost/priceComparison?serverTimezone=UTC</property>
     <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">Adekunle</property>
+
     <property name="hibernate.connection.pool_size">5</property>
     <property name="hibernate.current_session_context_class">thread</property>
     <property name="hibernate.show_sql">false</property>
     <property name="hibernate.format_sql">true</property>
 
+    <!-- using MySQL RDMS -->
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
 
 
+    <!-- Mapping files -->
     <mapping class="org.webscraping.entities.Variants" />
     <mapping class="org.webscraping.entities.Comparison" />
     <mapping class="org.webscraping.entities.Product" />

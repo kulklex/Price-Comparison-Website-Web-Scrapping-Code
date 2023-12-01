@@ -12,14 +12,12 @@ public class Variants {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "products_id")
-    private int products_id;
+    @JoinColumn(name = "products_id", nullable = false)
+    private Product product;
 
     @Column(name = "color")
     private String color;
 
-    @Column(name = "size")
-    private String size;
 
     public Variants() {}
 
@@ -31,12 +29,12 @@ public class Variants {
         this.id = id;
     }
 
-    public int getProducts_id() {
-        return products_id;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProducts_id(int products_id) {
-        this.products_id = products_id;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public String getColor() {
@@ -47,11 +45,13 @@ public class Variants {
         this.color = color;
     }
 
-    public String getSize() {
-        return size;
-    }
 
-    public void setSize(String size) {
-        this.size = size;
+    @Override
+    public String toString() {
+        return "Variants{" +
+                "id=" + id +
+                ", products_id=" + product +
+                ", color='" + color + '\'' +
+                '}';
     }
 }

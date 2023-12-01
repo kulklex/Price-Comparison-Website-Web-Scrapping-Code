@@ -1,23 +1,23 @@
 package org.webscraping.scrapers;
 
-import org.hibernate.SessionFactory;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.webscraping.ProductDao;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BackMarketScraper extends Thread{
 
-    public SessionFactory sessionFactory;
+    public ProductDao productDao;
 
-    public  BackMarketScraper (SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public  BackMarketScraper (ProductDao productDao) {
+        this.productDao = productDao;
     }
-
 
     @Override
     public void run() {
@@ -66,9 +66,12 @@ public class BackMarketScraper extends Thread{
                String imageUrl = pageDriver.findElement(By.xpath("//li[@class='list-none w-full flex justify-center focus:outline-none']//descendant::img"))
                        .getAttribute("src");
 
-               String name = pageDriver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
+               String dataToSplit = pageDriver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
                        .getAttribute("innerText");
 
+               String[] nameArray = dataToSplit.split("-");
+
+               String name = nameArray[0];
 
                String priceString = pageDriver.findElement(By.xpath("//div[@data-test='normal-price']"))
                        .getAttribute("innerText").substring(1);
@@ -79,15 +82,18 @@ public class BackMarketScraper extends Thread{
                String description = pageDriver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
                        .getAttribute("innerText");
 
-               String[] brandArray = name.split(" ");
+               String[] brandArray = dataToSplit.split(" ");
 
                String brand = brandArray[0].toUpperCase();
+
+               String color = brandArray[brandArray.length - 1];
 
                System.out.println("Name: "+name);
                System.out.println("Price: "+price);
                System.out.println("Image: "+imageUrl);
                System.out.println("Description: "+description);
                System.out.println("Brand: "+brand);
+               System.out.println("Color: "+color);
                pageDriver.quit();
 
            }

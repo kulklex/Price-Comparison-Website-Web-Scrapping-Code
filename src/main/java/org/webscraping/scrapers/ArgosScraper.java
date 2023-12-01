@@ -1,21 +1,22 @@
 package org.webscraping.scrapers;
 
-import org.hibernate.SessionFactory;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.webscraping.ProductDao;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArgosScraper extends Thread {
 
-    public SessionFactory sessionFactory;
+    public ProductDao productDao;
 
-    public  ArgosScraper (SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public  ArgosScraper (ProductDao productDao) {
+        this.productDao = productDao;
     }
 
     @Override

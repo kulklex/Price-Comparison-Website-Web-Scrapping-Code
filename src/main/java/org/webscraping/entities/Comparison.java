@@ -14,14 +14,6 @@ public class Comparison {
     @Column(name = "name")
     private String name;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Column(name = "price")
     private float price;
 
@@ -29,10 +21,18 @@ public class Comparison {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "variants_id")
-    private int variants_id;
+    @JoinColumn(name = "variants_id", nullable = false)
+    private Variants variants;
 
     public Comparison() {}
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getId() {
         return id;
@@ -58,11 +58,22 @@ public class Comparison {
         this.url = url;
     }
 
-    public int getVariants_id() {
-        return variants_id;
+    public Variants getVariants() {
+        return variants;
     }
 
-    public void setVariants_id(int variants_id) {
-        this.variants_id = variants_id;
+    public void setVariant(Variants variants) {
+        this.variants = variants;
+    }
+
+    @Override
+    public String toString() {
+        return "Comparison{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", url='" + url + '\'' +
+                ", variants_id=" + variants +
+                '}';
     }
 }
