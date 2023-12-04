@@ -7,6 +7,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.webscraping.ProductDao;
+import org.webscraping.entities.Comparison;
+import org.webscraping.entities.Product;
+import org.webscraping.entities.Variants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,16 +80,68 @@ public class ArgosScraper extends Thread {
 
                 String brand = brandArray[0].toUpperCase();
 
-
                 System.out.println("Name: "+name);
                 System.out.println("Price: "+price);
                 System.out.println("Image: "+imageUrl);
                 System.out.println("Description: "+description);
                 System.out.println("Brand: "+brand);
+
+
+                Product product = new Product();
+                product.setName(name);
+                product.setImageUrl(imageUrl);
+                product.setBrand(brand);
+                product.setDescription(description);
+
+
+                Variants variants = new Variants();
+                variants.setProduct(product);
+                variants.setColor("No Variant Color");
+
+                Comparison comparison = new Comparison();
+                comparison.setUrl(earbudUrl);
+                comparison.setPrice(price);
+                comparison.setVariant(variants);
+
+                try {
+                    productDao.saveAndMerge(comparison);
+                } catch (Exception ex) {
+                    System.out.println("Unable to save product");
+                    ex.printStackTrace();
+                }
+
+
                 pageDriver.quit();
             }
             driver.quit();
             page++;
         } while (true);
+    }
+
+
+    public void testSave(){
+
+
+        Product product = new Product();
+        product.setName("test name");
+        product.setImageUrl("test imageUrl");
+        product.setBrand("test brand");
+        product.setDescription("test description");
+
+
+        Variants variants = new Variants();
+        variants.setProduct(product);
+
+        Comparison comparison = new Comparison();
+        comparison.setUrl("test earbudUrl");
+        comparison.setPrice(17.00F);
+        comparison.setVariant(variants);
+
+        try {
+            productDao.saveAndMerge(comparison);
+        } catch (Exception ex) {
+            System.out.println("Unable to save product");
+            ex.printStackTrace();
+        }
     }
 }
