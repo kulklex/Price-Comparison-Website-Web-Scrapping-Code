@@ -1,35 +1,41 @@
 package org.webscraping.scrapers;
 
 
-import org.hibernate.SessionFactory;
-import org.webscraping.ProductDao;
-
 public class Scraper {
 
-     ProductDao productDao;
+     ArgosScraper argosScraper;
+     BackMarketScraper backMarketScraper;
+     CurrysScraper currysScraper;
+     EBayScraper eBayScraper;
+     JohnLewisScraper johnLewisScraper;
 
-     public void init() {
-        productDao = new ProductDao();
-        productDao.init();
+
+    public void setArgosScraper(ArgosScraper argosScraper) {
+        this.argosScraper = argosScraper;
     }
 
+    public void setBackMarketScraper(BackMarketScraper backMarketScraper) {
+        this.backMarketScraper = backMarketScraper;
+    }
+
+    public void setCurrysScraper(CurrysScraper currysScraper) {
+        this.currysScraper = currysScraper;
+    }
+
+    public void setEBayScraper(EBayScraper eBayScraper) {
+        this.eBayScraper = eBayScraper;
+    }
+
+    public void setJohnLewisScraper(JohnLewisScraper johnLewisScraper) {
+        this.johnLewisScraper = johnLewisScraper;
+    }
 
     public void scrape() {
-      ArgosScraper ags = new ArgosScraper(productDao);
-      ags.start();
-
-      BackMarketScraper bms = new BackMarketScraper(productDao);
-      bms.start();
-//
-//      CurrysScraper crs = new CurrysScraper(productDao);
-//      crs.start();
-//
-//
-//      EBayScraper ebs = new EBayScraper(productDao);
-//      ebs.start();
-//
-//      JohnLewisScraper jls = new JohnLewisScraper(productDao);
-//      jls.start();
+//        argosScraper.start();
+        backMarketScraper.start();
+//        currysScraper.start();
+//        eBayScraper.start();
+//        johnLewisScraper.start();
     }
 
 }

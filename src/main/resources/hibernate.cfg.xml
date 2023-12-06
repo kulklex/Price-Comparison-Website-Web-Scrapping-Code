@@ -20,7 +20,6 @@
 
 
     <!-- Mapping files -->
-    <mapping class="org.webscraping.entities.Variants" />
     <mapping class="org.webscraping.entities.Comparison" />
     <mapping class="org.webscraping.entities.Product" />
   </session-factory>

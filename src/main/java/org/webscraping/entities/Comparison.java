@@ -11,7 +11,7 @@ public class Comparison {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
+    @Column(name ="name")
     private String name;
 
     @Column(name = "price")
@@ -21,18 +21,11 @@ public class Comparison {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "variants_id", nullable = false)
-    private Variants variants;
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     public Comparison() {}
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getId() {
         return id;
@@ -40,6 +33,14 @@ public class Comparison {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public float getPrice() {
@@ -58,22 +59,21 @@ public class Comparison {
         this.url = url;
     }
 
-    public Variants getVariants() {
-        return variants;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setVariant(Variants variants) {
-        this.variants = variants;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Override
     public String toString() {
         return "Comparison{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name=" + name +
                 ", price=" + price +
                 ", url='" + url + '\'' +
-                ", variants_id=" + variants +
                 '}';
     }
 }

@@ -9,7 +9,6 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.webscraping.ProductDao;
 import org.webscraping.entities.Comparison;
 import org.webscraping.entities.Product;
-import org.webscraping.entities.Variants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public class ArgosScraper extends Thread {
 
     public ProductDao productDao;
 
-    public  ArgosScraper (ProductDao productDao) {
+    public void setProductDao(ProductDao productDao) {
         this.productDao = productDao;
     }
 
@@ -64,84 +63,60 @@ public class ArgosScraper extends Thread {
                 }
 
 
-                String name = pageDriver.findElement(By.className("Namestyles__Main-sc-269llv-1"))
-                        .findElement(By.tagName("span")).getText();
-
-                Float price = Float.valueOf(pageDriver.findElement(By.className("Pricestyles__Li-sc-1oev7i-0"))
-                        .getAttribute("content"));
-
-                String description = pageDriver.findElement(By.className("product-description-content-text"))
-                        .getAttribute("innerHTML");
-
-                String imageUrl = "https:" + pageDriver.findElement(By.className("MediaGallerystyles__ImageWrapper-sc-1jwueuh-2")).findElement(By.tagName("source"))
-                        .getAttribute("srcset");
-
-                String[] brandArray = name.split(" ");
-
-                String brand = brandArray[0].toUpperCase();
-
-                System.out.println("Name: "+name);
-                System.out.println("Price: "+price);
-                System.out.println("Image: "+imageUrl);
-                System.out.println("Description: "+description);
-                System.out.println("Brand: "+brand);
-
-
-                Product product = new Product();
-                product.setName(name);
-                product.setImageUrl(imageUrl);
-                product.setBrand(brand);
-                product.setDescription(description);
-
-
-                Variants variants = new Variants();
-                variants.setProduct(product);
-                variants.setColor("No Variant Color");
-
-                Comparison comparison = new Comparison();
-                comparison.setUrl(earbudUrl);
-                comparison.setPrice(price);
-                comparison.setVariant(variants);
-
                 try {
-                    productDao.saveAndMerge(comparison);
+                    String name = pageDriver.findElement(By.className("Namestyles__Main-sc-269llv-1"))
+                            .findElement(By.tagName("span")).getText();
+
+                    Float price = Float.valueOf(pageDriver.findElement(By.className("Pricestyles__Li-sc-1oev7i-0"))
+                            .getAttribute("content"));
+
+                    String description = pageDriver.findElement(By.className("product-description-content-text"))
+                            .getAttribute("innerHTML");
+
+                    String imageUrl = "https:" + pageDriver.findElement(By.className("MediaGallerystyles__ImageWrapper-sc-1jwueuh-2")).findElement(By.tagName("source"))
+                            .getAttribute("srcset");
+
+                    String[] brandArray = name.split(" ");
+
+                    String brand = brandArray[0].toUpperCase();
+
+                    System.out.println("Name: "+name);
+                    System.out.println("Price: "+price);
+                    System.out.println("Image: "+imageUrl);
+                    System.out.println("Description: "+description);
+                    System.out.println("Brand: "+brand);
+
+
+                    Product product = new Product();
+                    product.setName(name);
+                    product.setImageUrl(imageUrl);
+                    product.setBrand(brand);
+                    product.setDescription(description);
+
+
+
+                    Comparison comparison = new Comparison();
+                    comparison.setName("Argos");
+                    comparison.setUrl(earbudUrl);
+                    comparison.setPrice(price);
+                    comparison.setProduct(product);
+
+                    try {
+                        productDao.saveAndMerge(comparison);
+                    } catch (Exception ex) {
+                        System.out.println("Unable to save product");
+                        ex.printStackTrace();
+                    }
+
+
                 } catch (Exception ex) {
-                    System.out.println("Unable to save product");
-                    ex.printStackTrace();
+                    System.out.println("Argos Scraper Broke");
+                    continue;
                 }
-
-
                 pageDriver.quit();
             }
             driver.quit();
             page++;
         } while (true);
-    }
-
-
-    public void testSave(){
-
-
-        Product product = new Product();
-        product.setName("test name");
-        product.setImageUrl("test imageUrl");
-        product.setBrand("test brand");
-        product.setDescription("test description");
-
-
-        Variants variants = new Variants();
-        variants.setProduct(product);
-
-        Comparison comparison = new Comparison();
-        comparison.setUrl("test earbudUrl");
-        comparison.setPrice(17.00F);
-        comparison.setVariant(variants);
-
-        try {
-            productDao.saveAndMerge(comparison);
-        } catch (Exception ex) {
-            System.out.println("Unable to save product");
-            ex.printStackTrace();
-        }
     }
 }

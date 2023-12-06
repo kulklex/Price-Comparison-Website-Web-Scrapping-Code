@@ -9,7 +9,6 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.webscraping.ProductDao;
 import org.webscraping.entities.Comparison;
 import org.webscraping.entities.Product;
-import org.webscraping.entities.Variants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public class BackMarketScraper extends Thread{
 
     public ProductDao productDao;
 
-    public  BackMarketScraper (ProductDao productDao) {
+    public void setProductDao(ProductDao productDao) {
         this.productDao = productDao;
     }
 
@@ -106,14 +105,11 @@ public class BackMarketScraper extends Thread{
                product.setDescription(description);
 
 
-               Variants variants = new Variants();
-               variants.setProduct(product);
-               variants.setColor(color);
-
                Comparison comparison = new Comparison();
+               comparison.setName("Back Market");
                comparison.setUrl(earbudUrl);
                comparison.setPrice(price);
-               comparison.setVariant(variants);
+               comparison.setProduct(product);
 
                try {
                    productDao.saveAndMerge(comparison);
