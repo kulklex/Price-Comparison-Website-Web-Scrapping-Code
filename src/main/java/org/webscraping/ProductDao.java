@@ -11,9 +11,18 @@ import org.webscraping.entities.Product;
 
 import java.util.List;
 
+/**
+ * The ProductDao class provides data access methods for interacting with the database.
+ */
 public class ProductDao {
     public SessionFactory sessionFactory;
 
+    /**
+     * Saves or updates a Comparison entity and its associated Product entity in the database.
+     *
+     * @param comparison The Comparison entity to be saved or updated.
+     * @throws Exception If an error occurs during the database transaction.
+     */
     public void saveAndMerge(Comparison comparison) throws Exception{
         Session session = sessionFactory.getCurrentSession();
         Transaction transaction = null;
@@ -76,6 +85,9 @@ public class ProductDao {
     }
 
 
+    /**
+     * Initializes the Hibernate SessionFactory based on the configuration file.
+     */
     public void init() {
         try {
             StandardServiceRegistryBuilder standardServiceRegistryBuilder = new StandardServiceRegistryBuilder();

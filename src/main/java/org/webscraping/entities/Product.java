@@ -2,6 +2,15 @@ package org.webscraping.entities;
 
 import javax.persistence.*;
 
+
+/**
+ * The Product entity from the database using annotations
+ * @param id represents the id of the product
+ * @param name represents the name of the product
+ * @param description represents the description of the product
+ * @param brand represents the brand of the product
+ * @param image represents the url for the image of the product
+ */
 @Entity(name="Product")
 @Table(name = "product")
 public class Product {

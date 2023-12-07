@@ -13,15 +13,32 @@ import org.webscraping.entities.Product;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * EBayScraper is a web scraper for extracting product information from eBay.
+ * It extends the Thread class to allow concurrent scraping of data.
+ */
 public class EBayScraper extends Thread{
 
 
+    /**
+     * The DAO (Data Access Object) responsible for saving and merging product data.
+     */
     public ProductDao productDao;
 
+    /**
+     * Sets the ProductDao for this scraper to use.
+     *
+     * @param productDao The ProductDao instance to be set.
+     */
     public void setProductDao(ProductDao productDao) {
         this.productDao = productDao;
     }
 
+
+    /**
+     * Overrides the run method of the Thread class to execute the web scraping logic.
+     */
     @Override
     public void run() {
         FirefoxOptions options = new FirefoxOptions();
@@ -34,19 +51,22 @@ public class EBayScraper extends Thread{
             // Creating an instance of the web driver
             WebDriver driver = new FirefoxDriver(options);
 
-
+            // Navigating to the eBay search page for wireless earbuds
             driver.get("https://www.ebay.co.uk/sch/i.html?_from=R40&_nkw=earbuds+bluetooth+wireless&_sacat=0&LH_TitleDesc=0&Brand=Sony%7CApple%7CJBL%7CSamsung%7CTws&LH_BIN=1&_dcat=112529&LH_PrefLoc=1&_sop=16&imm=1&_pgn="+page);
 
 
             try {
+                // Adding a delay to allow the page to load
                 Thread.sleep(3000);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
 
+            // Extracting product URLs from the page
             List<WebElement> earbudsList = driver.findElements(By.xpath("//ul[@class='srp-results srp-list clearfix']//child::li//descendant::a[@class='s-item__link']"));
 
+            //Break if the new page no longer contains data OR if page number exceeds 3
             if (earbudsList.isEmpty() || page >= 4) {
                 break;
             }
@@ -57,18 +77,21 @@ public class EBayScraper extends Thread{
                 earbudsUrl.add(earbuds.getAttribute("href"));
             }
 
+            // Looping through each product URL
             for(String earbudUrl : earbudsUrl) {
                 WebDriver pageDriver = new FirefoxDriver(options);
                 pageDriver.get(earbudUrl);
 
                 try {
+                    // Adding a delay to allow the product page to load
                     Thread.sleep(3000);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
 
-                String imageUrl = pageDriver.findElement(By.xpath("//img[@class='ux-image-magnify__image--original']")).getAttribute("src");
 
+                // Extracting product details from the product page
+                String imageUrl = pageDriver.findElement(By.xpath("//img[@class='ux-image-magnify__image--original']")).getAttribute("src");
 
                 String dataToSplit = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
 
@@ -93,6 +116,7 @@ public class EBayScraper extends Thread{
                 System.out.println("Brand: "+brand);
 
 
+                // Displaying extracted information
                 Product product = new Product();
                 product.setName(name);
                 product.setImageUrl(imageUrl);
@@ -100,23 +124,24 @@ public class EBayScraper extends Thread{
                 product.setDescription(description);
 
 
+                // Creating Product and Comparison objects
                 Comparison comparison = new Comparison();
                 comparison.setName("EBay");
                 comparison.setUrl(earbudUrl);
                 comparison.setPrice(price);
                 comparison.setProduct(product);
 
+                // Saving the Comparison object
                 try {
                     productDao.saveAndMerge(comparison);
                 } catch (Exception ex) {
                     System.out.println("Unable to save product");
                     ex.printStackTrace();
                 }
-
-
+                // Closing the web driver for the product page
                 pageDriver.quit();
             }
-
+            // Closing the web driver for the main page
             driver.quit();
             page++;
         } while (true);

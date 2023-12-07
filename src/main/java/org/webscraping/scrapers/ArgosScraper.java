@@ -13,18 +13,39 @@ import org.webscraping.entities.Product;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * ArgosScraper is a web scraper for extracting product information from the Argos website.
+ * It extends the Thread class to allow concurrent scraping of data.
+ */
 public class ArgosScraper extends Thread {
 
+
+    /**
+     * The DAO (Data Access Object) responsible for saving and merging product data.
+     */
     public ProductDao productDao;
 
+
+    /**
+     * Sets the ProductDao for this scraper to use.
+     *
+     * @param productDao The ProductDao instance to be set.
+     */
     public void setProductDao(ProductDao productDao) {
         this.productDao = productDao;
     }
 
+    /**
+     * Overrides the run method of the Thread class to execute the web scraping logic.
+     */
     @Override
     public void run() {
+        // Configuration for headless Firefox browser
         FirefoxOptions options = new FirefoxOptions();
         System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
+
+        /*Set Headless mode */
         options.setHeadless(true);
 
 
@@ -41,9 +62,11 @@ public class ArgosScraper extends Thread {
                 ex.printStackTrace();
             }
 
-
+            // Extracting product URLs from the page
             List<WebElement> earbudsList = driver.findElements(By.className("ProductCardstyles__Link-h52kot-13"));
 
+
+            //Break if the new page no longer contains data
             if (earbudsList.isEmpty()) {
                 break;
             }
@@ -53,10 +76,14 @@ public class ArgosScraper extends Thread {
             for (WebElement earbuds : earbudsList) {
                 earbudsUrl.add(earbuds.getAttribute("href"));
             }
+
+            // Looping through each product URL
             for (String earbudUrl: earbudsUrl) {
+                // Creating a new web driver instance for the product page
                 WebDriver pageDriver = new FirefoxDriver(options);
                 pageDriver.get(earbudUrl);
                 try {
+                    // Adding a delay to allow the page to load
                     Thread.sleep(1000);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -80,13 +107,14 @@ public class ArgosScraper extends Thread {
 
                     String brand = brandArray[0].toUpperCase();
 
+                    // Displaying extracted information
                     System.out.println("Name: "+name);
                     System.out.println("Price: "+price);
                     System.out.println("Image: "+imageUrl);
                     System.out.println("Description: "+description);
                     System.out.println("Brand: "+brand);
 
-
+                    // Creating Product object
                     Product product = new Product();
                     product.setName(name);
                     product.setImageUrl(imageUrl);
@@ -94,13 +122,15 @@ public class ArgosScraper extends Thread {
                     product.setDescription(description);
 
 
-
+                    // Creating Comparison object
                     Comparison comparison = new Comparison();
                     comparison.setName("Argos");
                     comparison.setUrl(earbudUrl);
                     comparison.setPrice(price);
                     comparison.setProduct(product);
 
+
+                    // Saving the Comparison object using the provided ProductDao
                     try {
                         productDao.saveAndMerge(comparison);
                     } catch (Exception ex) {
@@ -113,9 +143,13 @@ public class ArgosScraper extends Thread {
                     System.out.println("Argos Scraper Broke");
                     continue;
                 }
+                // Closing the web driver for the product page
                 pageDriver.quit();
             }
+            // Closing the web driver for the main page
             driver.quit();
+
+            //increase the page to be scraped
             page++;
         } while (true);
     }

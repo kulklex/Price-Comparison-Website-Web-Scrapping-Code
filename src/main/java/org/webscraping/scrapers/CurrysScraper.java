@@ -13,14 +13,31 @@ import org.webscraping.entities.Product;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CurrysScraper is a web scraper for extracting product information from the Currys website.
+ * It extends the Thread class to allow concurrent scraping of data.
+ */
 public class CurrysScraper extends Thread{
 
+    /**
+     * The DAO (Data Access Object) responsible for saving and merging product data.
+     */
     public ProductDao productDao;
 
+
+    /**
+     * Sets the ProductDao for this scraper to use.
+     *
+     * @param productDao The ProductDao instance to be set.
+     */
     public void setProductDao(ProductDao productDao) {
         this.productDao = productDao;
     }
 
+
+    /**
+     * Overrides the run method of the Thread class to execute the web scraping logic.
+     */
     @Override
     public void run() {
         FirefoxOptions options = new FirefoxOptions();
@@ -29,18 +46,20 @@ public class CurrysScraper extends Thread{
         /*Set Headless mode */
         options.setHeadless(true);
 
+        // Creating an instance of the web driver
         WebDriver driver = new FirefoxDriver(options);
 
 
         driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/wireless-earbuds?pmin=60.0&pmax=499.0");
 
         try {
+            // Adding a delay to allow the page to load
             Thread.sleep(1000);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-
+        // Extracting product URLs from the page
         List<WebElement> earbudsList = driver.findElements(By.xpath("//div[@class='pdp-link click-beacon']//child::a"));
         List<String> earbudsUrl = new ArrayList<>();
 
@@ -48,15 +67,22 @@ public class CurrysScraper extends Thread{
             earbudsUrl.add(earbuds.getAttribute("href"));
         }
 
+
+        // Looping through each product URL
         for (String earbudUrl : earbudsUrl) {
             WebDriver pageDriver = new FirefoxDriver(options);
             pageDriver.get(earbudUrl);
+
+
             try {
+                // Adding a delay to allow the product page to load
                 Thread.sleep(1000);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
+
+            // Extracting product details from the product page
             String imageUrl = pageDriver.findElement(By.xpath("//img[@itemprop='image']"))
                     .getAttribute("src");
 
@@ -77,28 +103,33 @@ public class CurrysScraper extends Thread{
 
             String priceString = pageDriver.findElement(By.xpath("//div[@class='prices']//descendant::span[@class='value']"))
                     .getAttribute("content");
+
             Float price = Float.valueOf(priceString);
 
+
+            // Displaying extracted information
             System.out.println("Name: "+name);
             System.out.println("Price: "+price);
             System.out.println("Image: "+imageUrl);
             System.out.println("Color: "+color);
             System.out.println("Brand: "+brand);
 
-
+            // Creating Product object
             Product product = new Product();
             product.setName(name);
             product.setImageUrl(imageUrl);
             product.setBrand(brand);
             product.setDescription(description);
 
-
+            // Creating Comparison object
             Comparison comparison = new Comparison();
             comparison.setName("Currys");
             comparison.setUrl(earbudUrl);
             comparison.setPrice(price);
             comparison.setProduct(product);
 
+
+            // Saving the Comparison object using the provided ProductDao
             try {
                 productDao.saveAndMerge(comparison);
             } catch (Exception ex) {
@@ -106,10 +137,11 @@ public class CurrysScraper extends Thread{
                 ex.printStackTrace();
             }
 
-
+            // Closing the web driver for the product page
             pageDriver.quit();
         }
-        System.out.println(earbudsList.size());
+
+        // Closing the web driver for the main page
         driver.quit();
     }
 }
