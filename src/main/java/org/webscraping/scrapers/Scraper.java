@@ -75,10 +75,10 @@ public class Scraper {
      */
     public void scrape() {
         argosScraper.start();
-        backMarketScraper.start();
-        currysScraper.start();
-        eBayScraper.start();
-        johnLewisScraper.start();
+//        backMarketScraper.start();
+//        currysScraper.start();
+//        eBayScraper.start();
+//        johnLewisScraper.start();
     }
 
 }

@@ -3,7 +3,7 @@
 <hibernate-configuration>
   <session-factory>
 
-    <!-- Database Properties -->
+    <!-- Database connection settings -->
     <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost/priceComparison?serverTimezone=UTC</property>
     <property name="hibernate.connection.username">root</property>
@@ -14,8 +14,11 @@
     <property name="hibernate.show_sql">false</property>
     <property name="hibernate.format_sql">true</property>
 
-    <!-- using MySQL RDMS -->
+
+    <!-- Specify dialect -->
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+    <!-- Drop and re-create the database schema on startup -->
     <property name="hibernate.hbm2ddl.auto">update</property>
 
 

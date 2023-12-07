@@ -9,6 +9,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.webscraping.ProductDao;
 import org.webscraping.entities.Comparison;
 import org.webscraping.entities.Product;
+import org.webscraping.
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,5 +144,8 @@ public class CurrysScraper extends Thread{
 
         // Closing the web driver for the main page
         driver.quit();
+
+        // Signal that the scraper has completed
+        CurrysScraperTest.onScraperComplete();
     }
 }

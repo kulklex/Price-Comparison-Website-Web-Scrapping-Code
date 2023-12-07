@@ -111,4 +111,10 @@ public class ProductDao {
         }
     }
 
+    public void close() {
+        if (sessionFactory != null) {
+            sessionFactory.close();
+            System.out.println("Session Factory closed successfully");
+        }
+    }
 }
