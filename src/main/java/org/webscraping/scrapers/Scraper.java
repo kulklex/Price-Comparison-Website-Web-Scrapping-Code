@@ -1,9 +1,12 @@
 package org.webscraping.scrapers;
 
+import org.springframework.stereotype.Service;
+
 /**
  * The Scraper class manages the simultaneous operation of several web scraping threads.
  * It gathers individual scrapers and launches them simultaneously.
  */
+@Service
 public class Scraper {
 
     /** The scraper for the Argos website. */
@@ -74,11 +77,11 @@ public class Scraper {
      * Each scraper runs in a separate thread.
      */
     public void scrape() {
-//        argosScraper.start();
-//        backMarketScraper.start();
-//        currysScraper.start();
-//        eBayScraper.start();
-//        johnLewisScraper.start();
+        argosScraper.start();
+        backMarketScraper.start();
+        currysScraper.start();
+        eBayScraper.start();
+        johnLewisScraper.start();
     }
 
 }

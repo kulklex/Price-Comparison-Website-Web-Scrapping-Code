@@ -4,8 +4,6 @@ package org.webscraping.scrapers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.webscraping.ProductDao;
 import org.webscraping.entities.Comparison;
 import org.webscraping.entities.Product;
@@ -20,9 +18,24 @@ import java.util.List;
 public class CurrysScraper extends Thread{
 
     /**
+     * The provider for obtaining WebDriver instances.
+     */
+    private final FirefoxWebDriverProvider webDriverProvider;
+
+    /**
      * The DAO (Data Access Object) responsible for saving and merging product data.
      */
     public ProductDao productDao;
+
+
+    /**
+     * Constructs CurrysScraper with the specified WebDriverProvider.
+     *
+     * @param webDriverProvider The provider for obtaining WebDriver instances.
+     */
+    public CurrysScraper(FirefoxWebDriverProvider webDriverProvider) {
+        this.webDriverProvider = webDriverProvider;
+    }
 
 
     /**
@@ -40,14 +53,9 @@ public class CurrysScraper extends Thread{
      */
     @Override
     public void run() {
-        FirefoxOptions options = new FirefoxOptions();
-        System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
 
-        /*Set Headless mode */
-        options.setHeadless(true);
-
-        // Creating an instance of the web driver
-        WebDriver driver = new FirefoxDriver(options);
+        // Using webDriverProvider to get the WebDriver instance
+        WebDriver driver = webDriverProvider.getWebDriver();
 
 
 //        driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/wireless-earbuds?pmin=60.0&pmax=499.0");
@@ -71,7 +79,9 @@ public class CurrysScraper extends Thread{
 
         // Looping through each product URL
         for (String earbudUrl : earbudsUrl) {
-            WebDriver pageDriver = new FirefoxDriver(options);
+
+            // Using webDriverProvider to get the WebDriver instance
+            WebDriver pageDriver = webDriverProvider.getWebDriver();
             pageDriver.get(earbudUrl);
 
 

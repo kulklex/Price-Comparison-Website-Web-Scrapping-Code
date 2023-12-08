@@ -1,67 +1,35 @@
 package org.webscraping;
 
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.WebDriver;
 import org.webscraping.scrapers.ArgosScraper;
+import org.webscraping.scrapers.FirefoxWebDriverProvider;
+import org.webscraping.scrapers.WebDriverProvider;
 
-/**
- * JUnit test for the ArgosScraper class.
- */
+import static org.mockito.Mockito.*;
+
 public class ArgosScraperTest {
 
-    private static ArgosScraper argosScraper;
-    private static ProductDao productDao;
-
     /**
-     * Set up resources before running the tests.
-     */
-    @BeforeAll
-    static void setUp() {
-        // Configure headless Firefox browser for testing
-        FirefoxOptions options = new FirefoxOptions();
-        options.setHeadless(true);
-        System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
-
-        // Initialize ArgosScraper and ProductDao for testing
-        argosScraper = new ArgosScraper();
-        AppConfig appConfig = new AppConfig();
-        argosScraper.setProductDao(appConfig.getProductDao());
-
-        // Initialize ProductDao
-        productDao = new ProductDao();
-        productDao.init();
-    }
-
-    /**
-     * Clean up resources after running the tests.
-     */
-    @AfterAll
-    static void tearDown() {
-        // Close the ProductDao
-        productDao.close();
-    }
-
-    /**
-     * Test the ArgosScraper run method.
+     * Test the run method of {@link ArgosScraper}.
+     * It mocks the dependencies, creates the scraper with mocked dependencies, runs the scraper,
+     * and verifies interactions with the mocked dependencies.
      */
     @Test
-    void testRun() {
-        // Start the ArgosScraper
+    public void testRun() {
+        // Mocking the dependencies
+        WebDriverProvider mockWebDriverProvider = mock(WebDriverProvider.class);
+        WebDriver mockDriver = mock(WebDriver.class);
+        when(mockWebDriverProvider.getWebDriver()).thenReturn(mockDriver);
+
+        // Creating the EBayScraper with the mocked dependencies
+        ArgosScraper argosScraper = new ArgosScraper((FirefoxWebDriverProvider) mockWebDriverProvider);
+
+        // Running the scraper
         argosScraper.start();
 
-        try {
-            // Allow more time for scraping
-            argosScraper.join(15000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        // Assert that the scraper has completed
-        Assertions.assertFalse(argosScraper.isAlive(), "ArgosScraper should not be alive after scraping.");
+        // Verifying interactions
+        verify(mockWebDriverProvider, atLeastOnce()).getWebDriver();
+        // Add additional verifications as needed
     }
 }
-

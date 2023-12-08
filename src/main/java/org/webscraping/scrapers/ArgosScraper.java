@@ -4,8 +4,6 @@ package org.webscraping.scrapers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.webscraping.ProductDao;
 import org.webscraping.entities.Comparison;
 import org.webscraping.entities.Product;
@@ -20,11 +18,25 @@ import java.util.List;
  */
 public class ArgosScraper extends Thread {
 
+    /**
+     * The provider for obtaining WebDriver instances.
+     */
+    private final FirefoxWebDriverProvider webDriverProvider;
 
     /**
      * The DAO (Data Access Object) responsible for saving and merging product data.
      */
     public ProductDao productDao;
+
+
+    /**
+     * Constructs ArgosScraper with the specified WebDriverProvider.
+     *
+     * @param webDriverProvider The provider for obtaining WebDriver instances.
+     */
+    public ArgosScraper(FirefoxWebDriverProvider webDriverProvider) {
+        this.webDriverProvider = webDriverProvider;
+    }
 
 
     /**
@@ -41,18 +53,13 @@ public class ArgosScraper extends Thread {
      */
     @Override
     public void run() {
-        // Configuration for headless Firefox browser
-        FirefoxOptions options = new FirefoxOptions();
-        System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
-
-        /*Set Headless mode */
-        options.setHeadless(true);
 
 
-        int page = 1;
+
+        int page = 2;
         do {
-            // Creating an instance of the web driver
-            WebDriver driver = new FirefoxDriver(options);
+            // Using webDriverProvider to get the WebDriver instance
+            WebDriver driver = webDriverProvider.getWebDriver();
             driver.get("https://www.argos.co.uk/list/great-prices-on-selected-headphones/opt/page:"+page);
 
 
@@ -81,8 +88,8 @@ public class ArgosScraper extends Thread {
 
             // Looping through each product URL
             for (String earbudUrl: earbudsUrl) {
-                // Creating a new web driver instance for the product page
-                WebDriver pageDriver = new FirefoxDriver(options);
+                // Using webDriverProvider to get the WebDriver instance
+                WebDriver pageDriver = webDriverProvider.getWebDriver();
                 pageDriver.get(earbudUrl);
                 try {
                     // Adding a delay to allow the page to load

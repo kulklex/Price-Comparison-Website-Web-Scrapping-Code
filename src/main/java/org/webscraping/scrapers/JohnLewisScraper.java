@@ -20,9 +20,23 @@ import java.util.List;
 public class JohnLewisScraper extends Thread{
 
     /**
+     * The provider for obtaining WebDriver instances.
+     */
+    private final FirefoxWebDriverProvider webDriverProvider;
+
+    /**
      * The DAO (Data Access Object) responsible for saving and merging product data.
      */
     public ProductDao productDao;
+
+    /**
+     * Constructs JohnLewisScraper with the specified WebDriverProvider.
+     *
+     * @param webDriverProvider The provider for obtaining WebDriver instances.
+     */
+    public JohnLewisScraper(FirefoxWebDriverProvider webDriverProvider) {
+        this.webDriverProvider = webDriverProvider;
+    }
 
 
     /**
@@ -40,14 +54,10 @@ public class JohnLewisScraper extends Thread{
      */
     @Override
     public void run() {
-        FirefoxOptions options = new FirefoxOptions();
-        System.setProperty("webdriver.gecko.driver", "/usr/local/bin/geckodriver");
-        options.setHeadless(true);
-
 
         do {
-            // Creating an instance of the web driver
-            WebDriver driver = new FirefoxDriver(options);
+            // Using webDriverProvider to get the WebDriver instance
+            WebDriver driver = webDriverProvider.getWebDriver();
 
             // Navigating to the John Lewis search page for earbuds
             driver.get("https://www.johnlewis.com/search?search-term=earbuds&sortBy=popularity&chunk=3");
@@ -74,8 +84,7 @@ public class JohnLewisScraper extends Thread{
 
             // Looping through each product URL
             for (String earbudUrl : earbudsUrl) {
-                // Creating a new web driver instance for the product page
-                WebDriver pageDriver = new FirefoxDriver(options);
+                WebDriver pageDriver = webDriverProvider.getWebDriver();
 
                 pageDriver.get(earbudUrl);
 

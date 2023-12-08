@@ -40,7 +40,7 @@ class ProductDaoTest {
     @Test
     void testSaveAndMerge() {
         try {
-            // Create a test Comparison entity
+            // Creating a test Comparison entity
             Comparison comparison = new Comparison();
             Product product = new Product();
             product.setName("Test Product");
@@ -53,11 +53,11 @@ class ProductDaoTest {
             // Save and merge the test Comparison
             productDao.saveAndMerge(comparison);
 
-            // Assert that the Comparison and associated Product are saved
+            // Asserting that the Comparison and associated Product are saved
             Assertions.assertNotNull(comparison.getId(), "Comparison ID should not be null after saving.");
             Assertions.assertNotNull(product.getId(), "Product ID should not be null after saving.");
 
-            // Clean up: Delete the test Comparison and associated Product from the database
+            // Deleting the test Comparison and associated Product from the database
             cleanUpTestEntities(comparison);
         } catch (Exception e) {
             e.printStackTrace();

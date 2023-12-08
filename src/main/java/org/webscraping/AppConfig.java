@@ -1,12 +1,25 @@
 package org.webscraping;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.webscraping.scrapers.*;
 
 /**
  * AppConfig is a configuration class responsible for defining Spring beans for the application.
  */
+@Configuration
+@ComponentScan(basePackages = "org.webscraping.scrapers")
 public class AppConfig {
+
+    /**
+     * The provider for obtaining WebDriver instances.
+     */
+    private final FirefoxWebDriverProvider webDriverProvider;
+
+    public AppConfig(FirefoxWebDriverProvider webDriverProvider) {
+        this.webDriverProvider =  webDriverProvider;
+    }
 
     /**
      * Creates and initializes a ProductDao bean.
@@ -28,7 +41,7 @@ public class AppConfig {
      */
     @Bean
     public ArgosScraper argosScraper() {
-        ArgosScraper tmpArgosScraper = new ArgosScraper();
+        ArgosScraper tmpArgosScraper = new ArgosScraper(webDriverProvider);
         tmpArgosScraper.setProductDao(getProductDao());
         return tmpArgosScraper;
     }
@@ -41,7 +54,7 @@ public class AppConfig {
      */
     @Bean
     public BackMarketScraper backMarketScraper() {
-        BackMarketScraper tmpBackMarketScraper = new BackMarketScraper();
+        BackMarketScraper tmpBackMarketScraper = new BackMarketScraper(webDriverProvider);
         tmpBackMarketScraper.setProductDao(getProductDao());
         return tmpBackMarketScraper;
     }
@@ -54,7 +67,7 @@ public class AppConfig {
      */
     @Bean
     public CurrysScraper currysScraper() {
-        CurrysScraper tmpCurrysScraper = new CurrysScraper();
+        CurrysScraper tmpCurrysScraper = new CurrysScraper(webDriverProvider);
         tmpCurrysScraper.setProductDao(getProductDao());
         return tmpCurrysScraper;
     }
@@ -67,7 +80,7 @@ public class AppConfig {
      */
     @Bean
     public EBayScraper eBayScraper() {
-        EBayScraper tmpEBayScraper = new EBayScraper();
+        EBayScraper tmpEBayScraper = new EBayScraper(webDriverProvider);
         tmpEBayScraper.setProductDao(getProductDao());
         return tmpEBayScraper;
     }
@@ -80,7 +93,7 @@ public class AppConfig {
      */
     @Bean
     public JohnLewisScraper johnLewisScraper() {
-        JohnLewisScraper tmpJohnLewisScraper = new JohnLewisScraper();
+        JohnLewisScraper tmpJohnLewisScraper = new JohnLewisScraper(webDriverProvider);
         tmpJohnLewisScraper.setProductDao(getProductDao());
         return tmpJohnLewisScraper;
     }
