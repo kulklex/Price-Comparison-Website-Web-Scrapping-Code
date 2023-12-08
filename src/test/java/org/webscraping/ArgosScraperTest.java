@@ -28,7 +28,8 @@ public class ArgosScraperTest {
 
         // Initialize ArgosScraper and ProductDao for testing
         argosScraper = new ArgosScraper();
-        argosScraper.setProductDao(productDao);
+        AppConfig appConfig = new AppConfig();
+        argosScraper.setProductDao(appConfig.getProductDao());
 
         // Initialize ProductDao
         productDao = new ProductDao();
@@ -54,7 +55,7 @@ public class ArgosScraperTest {
 
         try {
             // Allow more time for scraping
-            argosScraper.join(60000);
+            argosScraper.join(15000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

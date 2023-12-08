@@ -74,7 +74,7 @@ public class Scraper {
      * Each scraper runs in a separate thread.
      */
     public void scrape() {
-        argosScraper.start();
+//        argosScraper.start();
 //        backMarketScraper.start();
 //        currysScraper.start();
 //        eBayScraper.start();

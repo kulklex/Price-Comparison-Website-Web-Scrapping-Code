@@ -48,17 +48,17 @@ public class ProductDao {
 
 
             //Save or update comparison
-            queryStr = "from Comparison where product_id='" + comparison.getProduct().getId() + "'";
+            queryStr = "from Comparison where name='" + comparison.getName() + "' and product_id=" + comparison.getProduct().getId();
             List<Comparison> comparisonList = session.createQuery(queryStr).getResultList();
 
-            // check if comparison exists
-            if(comparisonList.size() == 1) {
-                System.out.println("Comparison found with ID: " + comparisonList.get(0).getId());
 
-                //Update comparison if necessary
+            if(comparisonList.size() == 1) {
+                System.out.println("Comparison found with ID: " + comparisonList.get(0).getId() + " and name: " + comparisonList.get(0).getName());
+
+                //Update comparison because it might have been updated
                 System.out.println("Updating Comparison");
                 System.out.println("Old price: " + comparisonList.get(0).getPrice() + "\n" + "New price: " + comparison.getPrice());
-                System.out.println("Old Url" + comparisonList.get(0).getUrl() + "\n" + "New Url: " + comparison.getUrl());
+                System.out.println("Old Url: " + comparisonList.get(0).getUrl() + "\n" + "New Url: " + comparison.getUrl());
             }
             else if (comparisonList.isEmpty()) {
                 session.saveOrUpdate(comparison);

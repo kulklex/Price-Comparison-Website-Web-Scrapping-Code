@@ -89,54 +89,58 @@ public class EBayScraper extends Thread{
                     ex.printStackTrace();
                 }
 
-
-                // Extracting product details from the product page
-                String imageUrl = pageDriver.findElement(By.xpath("//img[@class='ux-image-magnify__image--original']")).getAttribute("src");
-
-                String dataToSplit = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
-
-                String[] nameArray = dataToSplit.split("-");
-                String name = nameArray[0];
-
-                String description = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
-
-                String priceString = pageDriver.findElement(By.xpath("//div[@class='x-price-primary']//child::span"))
-                        .getText().split(" ")[0].substring(1);
-
-                Float price = Float.valueOf(priceString);
-
-                String[] brandArray = dataToSplit.split(" ");
-
-                String brand = brandArray[0].toUpperCase();
-
-                System.out.println("Name: "+name);
-                System.out.println("Price: "+price);
-                System.out.println("Image: "+imageUrl);
-                System.out.println("Description: "+description);
-                System.out.println("Brand: "+brand);
-
-
-                // Displaying extracted information
-                Product product = new Product();
-                product.setName(name);
-                product.setImageUrl(imageUrl);
-                product.setBrand(brand);
-                product.setDescription(description);
-
-
-                // Creating Product and Comparison objects
-                Comparison comparison = new Comparison();
-                comparison.setName("EBay");
-                comparison.setUrl(earbudUrl);
-                comparison.setPrice(price);
-                comparison.setProduct(product);
-
-                // Saving the Comparison object
                 try {
-                    productDao.saveAndMerge(comparison);
+// Extracting product details from the product page
+                    String imageUrl = pageDriver.findElement(By.xpath("//img[@class='ux-image-magnify__image--original']")).getAttribute("src");
+
+                    String dataToSplit = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
+
+                    String[] nameArray = dataToSplit.split(" - ");
+                    String name = nameArray[0];
+
+                    String description = pageDriver.findElement(By.xpath("//span[@class='ux-textspans ux-textspans--BOLD']")).getText();
+
+                    String priceString = pageDriver.findElement(By.xpath("//div[@class='x-price-primary']//child::span"))
+                            .getText().split(" ")[0].substring(1);
+
+                    Float price = Float.valueOf(priceString);
+
+                    String[] brandArray = dataToSplit.split(" ");
+
+                    String brand = brandArray[0].toUpperCase();
+
+                    System.out.println("Name: "+name);
+                    System.out.println("Price: "+price);
+                    System.out.println("Image: "+imageUrl);
+                    System.out.println("Description: "+description);
+                    System.out.println("Brand: "+brand);
+
+
+                    // Displaying extracted information
+                    Product product = new Product();
+                    product.setName(name);
+                    product.setImageUrl(imageUrl);
+                    product.setBrand(brand);
+                    product.setDescription(description);
+
+
+                    // Creating Product and Comparison objects
+                    Comparison comparison = new Comparison();
+                    comparison.setName("EBay");
+                    comparison.setUrl(earbudUrl);
+                    comparison.setPrice(price);
+                    comparison.setProduct(product);
+
+                    // Saving the Comparison object
+                    try {
+                        productDao.saveAndMerge(comparison);
+                    } catch (Exception ex) {
+                        System.out.println("Unable to save product");
+                        ex.printStackTrace();
+                    }
                 } catch (Exception ex) {
-                    System.out.println("Unable to save product");
-                    ex.printStackTrace();
+                    System.out.println("EBay Scraper Broke");
+                    continue;
                 }
                 // Closing the web driver for the product page
                 pageDriver.quit();

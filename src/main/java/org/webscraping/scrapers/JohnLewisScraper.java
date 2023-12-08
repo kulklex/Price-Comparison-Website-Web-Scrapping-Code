@@ -50,7 +50,7 @@ public class JohnLewisScraper extends Thread{
             WebDriver driver = new FirefoxDriver(options);
 
             // Navigating to the John Lewis search page for earbuds
-            driver.get("https://www.johnlewis.com/search?search-term=earbuds&sortBy=popularity&chunk=4");
+            driver.get("https://www.johnlewis.com/search?search-term=earbuds&sortBy=popularity&chunk=3");
 
             try {
                 // Adding a delay to allow the page to load

@@ -57,11 +57,13 @@ public class ArgosScraper extends Thread {
 
 
             try {
+                // Adding a delay to allow the page to load
                 Thread.sleep(1000);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
+            System.out.println("Entering page: "+page);
             // Extracting product URLs from the page
             List<WebElement> earbudsList = driver.findElements(By.className("ProductCardstyles__Link-h52kot-13"));
 
@@ -91,8 +93,9 @@ public class ArgosScraper extends Thread {
 
 
                 try {
-                    String name = pageDriver.findElement(By.className("Namestyles__Main-sc-269llv-1"))
-                            .findElement(By.tagName("span")).getText();
+                    String[] nameArray = pageDriver.findElement(By.className("Namestyles__Main-sc-269llv-1"))
+                            .findElement(By.tagName("span")).getText().split(" - ");
+                    String name = nameArray[0];
 
                     Float price = Float.valueOf(pageDriver.findElement(By.className("Pricestyles__Li-sc-1oev7i-0"))
                             .getAttribute("content"));

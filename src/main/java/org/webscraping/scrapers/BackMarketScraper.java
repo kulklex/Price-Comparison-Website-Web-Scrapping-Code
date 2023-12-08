@@ -94,7 +94,7 @@ public class BackMarketScraper extends Thread{
                String dataToSplit = pageDriver.findElement(By.xpath("//h1[@class='title-1 lg:max-w-[38rem]']"))
                        .getAttribute("innerText");
 
-               String[] nameArray = dataToSplit.split("-");
+               String[] nameArray = dataToSplit.split(" - ");
 
                String name = nameArray[0];
 

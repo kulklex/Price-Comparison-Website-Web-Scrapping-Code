@@ -28,7 +28,8 @@ public class BackMarketScraperTest {
 
         // Initialize ArgosScraper and ProductDao for testing
         backMarketScraper = new BackMarketScraper();
-        backMarketScraper.setProductDao(productDao);
+        AppConfig appConfig = new AppConfig();
+        backMarketScraper.setProductDao(appConfig.getProductDao());
 
         // Initialize ProductDao
         productDao = new ProductDao();
@@ -41,7 +42,7 @@ public class BackMarketScraperTest {
     @AfterAll
     static void tearDown() {
         // Close the ProductDao
-        productDao.close();
+        productDao.sessionFactory.close();
     }
 
     /**
@@ -54,7 +55,7 @@ public class BackMarketScraperTest {
 
         try {
             // Allow more time for scraping
-            backMarketScraper.join(60000);
+            backMarketScraper.join(15000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

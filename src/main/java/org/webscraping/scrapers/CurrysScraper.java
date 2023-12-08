@@ -9,7 +9,6 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.webscraping.ProductDao;
 import org.webscraping.entities.Comparison;
 import org.webscraping.entities.Product;
-import org.webscraping.
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,8 @@ public class CurrysScraper extends Thread{
         WebDriver driver = new FirefoxDriver(options);
 
 
-        driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/wireless-earbuds?pmin=60.0&pmax=499.0");
+//        driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/wireless-earbuds?pmin=60.0&pmax=499.0");
+            driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/in-ear-headphones?searchTerm=earphones");
 
         try {
             // Adding a delay to allow the page to load
@@ -144,8 +144,5 @@ public class CurrysScraper extends Thread{
 
         // Closing the web driver for the main page
         driver.quit();
-
-        // Signal that the scraper has completed
-        CurrysScraperTest.onScraperComplete();
     }
 }
