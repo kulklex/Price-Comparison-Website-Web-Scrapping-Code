@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.webscraping.scrapers.ArgosScraper;
 import org.webscraping.scrapers.FirefoxWebDriverProvider;
-import org.webscraping.scrapers.WebDriverProvider;
 
 import static org.mockito.Mockito.*;
 
@@ -18,18 +17,17 @@ public class ArgosScraperTest {
     @Test
     public void testRun() {
         // Mocking the dependencies
-        WebDriverProvider mockWebDriverProvider = mock(WebDriverProvider.class);
+        FirefoxWebDriverProvider mockWebDriverProvider = mock(FirefoxWebDriverProvider.class);
         WebDriver mockDriver = mock(WebDriver.class);
         when(mockWebDriverProvider.getWebDriver()).thenReturn(mockDriver);
 
-        // Creating the EBayScraper with the mocked dependencies
-        ArgosScraper argosScraper = new ArgosScraper((FirefoxWebDriverProvider) mockWebDriverProvider);
+        // Creating the ArgosScraper with the mocked dependencies
+        ArgosScraper argosScraper = new ArgosScraper(mockWebDriverProvider);
 
         // Running the scraper
         argosScraper.start();
 
-        // Verifying interactions
+        // Verifying Firefox Driver
         verify(mockWebDriverProvider, atLeastOnce()).getWebDriver();
-        // Add additional verifications as needed
     }
 }

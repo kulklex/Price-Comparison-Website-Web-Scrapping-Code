@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.webscraping.scrapers.CurrysScraper;
 import org.webscraping.scrapers.FirefoxWebDriverProvider;
-import org.webscraping.scrapers.WebDriverProvider;
 
 import static org.mockito.Mockito.*;
 
@@ -18,18 +17,17 @@ public class CurrysScraperTest {
     @Test
     public void testRun() {
         // Mocking the dependencies
-        WebDriverProvider mockWebDriverProvider = mock(WebDriverProvider.class);
+        FirefoxWebDriverProvider mockWebDriverProvider = mock(FirefoxWebDriverProvider.class);
         WebDriver mockDriver = mock(WebDriver.class);
         when(mockWebDriverProvider.getWebDriver()).thenReturn(mockDriver);
 
         // Creating the CurrysScraper with the mocked dependencies
-        CurrysScraper currysScraper = new CurrysScraper((FirefoxWebDriverProvider) mockWebDriverProvider);
+        CurrysScraper currysScraper = new CurrysScraper(mockWebDriverProvider);
 
         // Running the scraper
         currysScraper.start();
 
         // Verifying interactions
         verify(mockWebDriverProvider, atLeastOnce()).getWebDriver();
-        // Add additional verifications as needed
     }
 }

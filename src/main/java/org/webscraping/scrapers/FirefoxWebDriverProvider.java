@@ -8,6 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FirefoxWebDriverProvider implements WebDriverProvider{
+
+    /**
+     * Provides a configured instance of a headless Firefox WebDriver.
+     *
+     * @return A configured instance of the Firefox WebDriver.
+     */
     @Override
     public WebDriver getWebDriver() {
         // Configuration for headless Firefox browser

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.webscraping.scrapers.EBayScraper;
 import org.webscraping.scrapers.FirefoxWebDriverProvider;
-import org.webscraping.scrapers.WebDriverProvider;
 
 import static org.mockito.Mockito.*;
 
@@ -18,18 +17,17 @@ public class EBayScraperTest {
     @Test
     public void testRun() {
         // Mocking the dependencies
-        WebDriverProvider mockWebDriverProvider = mock(WebDriverProvider.class);
+        FirefoxWebDriverProvider mockWebDriverProvider = mock(FirefoxWebDriverProvider.class);
         WebDriver mockDriver = mock(WebDriver.class);
         when(mockWebDriverProvider.getWebDriver()).thenReturn(mockDriver);
 
         // Creating the EBayScraper with the mocked dependencies
-        EBayScraper eBayScraper = new EBayScraper((FirefoxWebDriverProvider) mockWebDriverProvider);
+        EBayScraper eBayScraper = new EBayScraper(mockWebDriverProvider);
 
         // Running the scraper
         eBayScraper.start();
 
         // Verifying interactions
         verify(mockWebDriverProvider, atLeastOnce()).getWebDriver();
-        // Add additional verifications as needed
     }
 }

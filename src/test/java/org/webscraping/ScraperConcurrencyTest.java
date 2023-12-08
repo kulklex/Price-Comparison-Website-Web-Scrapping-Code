@@ -2,36 +2,34 @@ package org.webscraping;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
 import org.webscraping.scrapers.*;
+
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
 
 /**
  * The ScraperConcurrencyTest class contains JUnit tests for the multithreading functionality.
  */
 public class ScraperConcurrencyTest {
 
-    /**
-     * The provider for obtaining WebDriver instances.
-     */
-    private final FirefoxWebDriverProvider webDriverProvider;
 
 
-    /**
-     * Constructs ScraperConcurrencyTest with the specified WebDriverProvider.
-     *
-     * @param webDriverProvider The provider for obtaining WebDriver instances.
-     */
-    public ScraperConcurrencyTest(FirefoxWebDriverProvider webDriverProvider) {
-        this.webDriverProvider = webDriverProvider;
-    }
+
 
     @Test
-    void testConcurrentScraping() {
-        // Creating instances of the individual scrapers and set up any dependencies
-        ArgosScraper argosScraper = new ArgosScraper(webDriverProvider);
-        BackMarketScraper backMarketScraper = new BackMarketScraper(webDriverProvider);
-        CurrysScraper currysScraper = new CurrysScraper(webDriverProvider);
-        EBayScraper eBayScraper = new EBayScraper(webDriverProvider);
-        JohnLewisScraper johnLewisScraper = new JohnLewisScraper(webDriverProvider);
+    public void testConcurrentScraping() throws InterruptedException {
+        // Mocking the dependencies
+        FirefoxWebDriverProvider mockWebDriverProvider = mock(FirefoxWebDriverProvider.class);
+        WebDriver mockDriver = mock(WebDriver.class);
+        when(mockWebDriverProvider.getWebDriver()).thenReturn(mockDriver);
+
+        // Creating instances of the individual scrapers and set up with mocked dependencies
+        ArgosScraper argosScraper = new ArgosScraper(mockWebDriverProvider);
+        BackMarketScraper backMarketScraper = new BackMarketScraper(mockWebDriverProvider);
+        CurrysScraper currysScraper = new CurrysScraper(mockWebDriverProvider);
+        EBayScraper eBayScraper = new EBayScraper(mockWebDriverProvider);
+        JohnLewisScraper johnLewisScraper = new JohnLewisScraper(mockWebDriverProvider);
 
         // Creating an instance of the Scraper and setting all individual scrapers
         Scraper scraper = new Scraper();
@@ -44,6 +42,12 @@ public class ScraperConcurrencyTest {
         // Executing concurrent scraping
         scraper.scrape();
 
+        // Wait for each thread to finish
+        argosScraper.join();
+        backMarketScraper.join();
+        currysScraper.join();
+        eBayScraper.join();
+        johnLewisScraper.join();
 
         // Adding assertions
         // Checking if each thread has finished execution
