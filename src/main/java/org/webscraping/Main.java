@@ -10,7 +10,6 @@ public class Main {
     /**
      * The main method to start the web scraping process.
      *
-     * @param args The command-line arguments (not used in this application).
      * @throws InterruptedException If the execution is interrupted during the scraping process.
      */
     public static void main(String[] args) throws InterruptedException {

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.webscraping.scrapers.*;
 
 /**
- * AppConfig is a configuration class responsible for defining Spring beans for the application.
+ * AppConfig class is a configuration class responsible for defining Spring beans for the application.
  */
 @Configuration
 @ComponentScan(basePackages = "org.webscraping.scrapers")
