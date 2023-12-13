@@ -1,16 +1,17 @@
-package org.webscraping;
+package org.webscrapingtest;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.webscraping.scrapers.CurrysScraper;
+import org.webscraping.scrapers.BackMarketScraper;
+import org.webscraping.scrapers.JohnLewisScraper;
 import org.webscraping.scrapers.FirefoxWebDriverProvider;
 
 import static org.mockito.Mockito.*;
 
-public class CurrysScraperTest {
+public class BackMarketScraperTest {
 
     /**
-     * Test the run method of {@link CurrysScraper}.
+     * Test the run method of {@link BackMarketScraper}.
      * It mocks the dependencies, creates the scraper with mocked dependencies, runs the scraper,
      * and verifies interactions with the mocked dependencies.
      */
@@ -21,11 +22,11 @@ public class CurrysScraperTest {
         WebDriver mockDriver = mock(WebDriver.class);
         when(mockWebDriverProvider.getWebDriver()).thenReturn(mockDriver);
 
-        // Creating the CurrysScraper with the mocked dependencies
-        CurrysScraper currysScraper = new CurrysScraper(mockWebDriverProvider);
+        // Creating the JohnLewisScraper with the mocked dependencies
+        BackMarketScraper backMarketScraper = new BackMarketScraper(mockWebDriverProvider);
 
         // Running the scraper
-        currysScraper.start();
+        backMarketScraper.start();
 
         // Verifying interactions
         verify(mockWebDriverProvider, atLeastOnce()).getWebDriver();

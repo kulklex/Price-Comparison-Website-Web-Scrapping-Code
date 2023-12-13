@@ -53,9 +53,6 @@ public class ArgosScraper extends Thread {
      */
     @Override
     public void run() {
-
-
-
         int page = 2;
         do {
             // Using webDriverProvider to get the WebDriver instance

@@ -51,8 +51,7 @@ public class BackMarketScraper extends Thread{
      */
     @Override
     public void run() {
-
-        int page = 4;
+       int page = 4;
 
        do {
            // Using webDriverProvider to get the WebDriver instance

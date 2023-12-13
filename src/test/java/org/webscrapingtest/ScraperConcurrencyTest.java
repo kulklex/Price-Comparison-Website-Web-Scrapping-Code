@@ -1,4 +1,4 @@
-package org.webscraping;
+package org.webscrapingtest;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.webscraping.scrapers.*;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.atLeastOnce;
 
 /**
  * The ScraperConcurrencyTest class contains JUnit tests for the multithreading functionality.

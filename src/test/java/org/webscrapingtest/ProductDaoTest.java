@@ -1,8 +1,9 @@
-package org.webscraping;
+package org.webscrapingtest;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.*;
+import org.webscraping.ProductDao;
 import org.webscraping.entities.Comparison;
 import org.webscraping.entities.Product;
 

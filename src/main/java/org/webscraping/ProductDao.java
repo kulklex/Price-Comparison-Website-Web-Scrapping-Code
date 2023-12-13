@@ -110,11 +110,4 @@ public class ProductDao {
             System.out.println("SessionFactory creation failed." + ex);
         }
     }
-
-    public void close() {
-        if (sessionFactory != null) {
-            sessionFactory.close();
-            System.out.println("Session Factory closed successfully");
-        }
-    }
 }

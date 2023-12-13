@@ -25,7 +25,6 @@ public class Scraper {
      JohnLewisScraper johnLewisScraper;
 
 
-
     /**
      * Sets the ArgosScraper instance for this Scraper.
      *

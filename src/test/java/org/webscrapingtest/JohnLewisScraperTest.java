@@ -1,16 +1,16 @@
-package org.webscraping;
+package org.webscrapingtest;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.webscraping.scrapers.ArgosScraper;
+import org.webscraping.scrapers.JohnLewisScraper;
 import org.webscraping.scrapers.FirefoxWebDriverProvider;
 
 import static org.mockito.Mockito.*;
 
-public class ArgosScraperTest {
+public class JohnLewisScraperTest {
 
     /**
-     * Test the run method of {@link ArgosScraper}.
+     * Test the run method of {@link JohnLewisScraper}.
      * It mocks the dependencies, creates the scraper with mocked dependencies, runs the scraper,
      * and verifies interactions with the mocked dependencies.
      */
@@ -21,13 +21,13 @@ public class ArgosScraperTest {
         WebDriver mockDriver = mock(WebDriver.class);
         when(mockWebDriverProvider.getWebDriver()).thenReturn(mockDriver);
 
-        // Creating the ArgosScraper with the mocked dependencies
-        ArgosScraper argosScraper = new ArgosScraper(mockWebDriverProvider);
+        // Creating the JohnLewisScraper with the mocked dependencies
+        JohnLewisScraper johnLewisScraper = new JohnLewisScraper(mockWebDriverProvider);
 
         // Running the scraper
-        argosScraper.start();
+        johnLewisScraper.start();
 
-        // Verifying Firefox Driver
+        // Verifying interactions
         verify(mockWebDriverProvider, atLeastOnce()).getWebDriver();
     }
 }

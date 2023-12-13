@@ -1,16 +1,17 @@
-package org.webscraping;
+package org.webscrapingtest;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.webscraping.scrapers.EBayScraper;
+import org.webscraping.scrapers.ArgosScraper;
+import org.webscraping.scrapers.JohnLewisScraper;
 import org.webscraping.scrapers.FirefoxWebDriverProvider;
 
 import static org.mockito.Mockito.*;
 
-public class EBayScraperTest {
+public class ArgosScraperTest {
 
     /**
-     * Test the run method of {@link EBayScraper}.
+     * Test the run method of {@link ArgosScraper}.
      * It mocks the dependencies, creates the scraper with mocked dependencies, runs the scraper,
      * and verifies interactions with the mocked dependencies.
      */
@@ -21,11 +22,11 @@ public class EBayScraperTest {
         WebDriver mockDriver = mock(WebDriver.class);
         when(mockWebDriverProvider.getWebDriver()).thenReturn(mockDriver);
 
-        // Creating the EBayScraper with the mocked dependencies
-        EBayScraper eBayScraper = new EBayScraper(mockWebDriverProvider);
+        // Creating the ArgosScraper with the mocked dependencies
+        ArgosScraper argosScraper = new ArgosScraper(mockWebDriverProvider);
 
         // Running the scraper
-        eBayScraper.start();
+        argosScraper.start();
 
         // Verifying interactions
         verify(mockWebDriverProvider, atLeastOnce()).getWebDriver();

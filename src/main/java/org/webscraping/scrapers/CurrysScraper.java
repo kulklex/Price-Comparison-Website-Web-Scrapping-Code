@@ -53,13 +53,10 @@ public class CurrysScraper extends Thread{
      */
     @Override
     public void run() {
-
         // Using webDriverProvider to get the WebDriver instance
         WebDriver driver = webDriverProvider.getWebDriver();
 
-
-//        driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/wireless-earbuds?pmin=60.0&pmax=499.0");
-            driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/in-ear-headphones?searchTerm=earphones");
+        driver.get("https://www.currys.co.uk/tv-and-audio/headphones/headphones/in-ear-headphones?searchTerm=earphones");
 
         try {
             // Adding a delay to allow the page to load

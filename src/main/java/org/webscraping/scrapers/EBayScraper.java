@@ -53,7 +53,6 @@ public class EBayScraper extends Thread{
      */
     @Override
     public void run() {
-
         int page = 1;
 
         do {
@@ -131,7 +130,6 @@ public class EBayScraper extends Thread{
                     product.setImageUrl(imageUrl);
                     product.setBrand(brand);
                     product.setDescription(description);
-
 
                     // Creating Product and Comparison objects
                     Comparison comparison = new Comparison();
