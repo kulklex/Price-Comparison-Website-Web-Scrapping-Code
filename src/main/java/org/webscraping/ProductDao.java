@@ -12,9 +12,10 @@ import org.webscraping.entities.Product;
 import java.util.List;
 
 /**
- * The ProductDao class provides hibernate data access methods for interacting with the database.
+ * The {@code ProductDao} class provides Hibernate data access methods for interacting with the database.
  */
 public class ProductDao {
+    /** The Hibernate SessionFactory for database interaction. */
     public SessionFactory sessionFactory;
 
     /**

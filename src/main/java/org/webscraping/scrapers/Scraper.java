@@ -3,7 +3,7 @@ package org.webscraping.scrapers;
 import org.springframework.stereotype.Service;
 
 /**
- * The Scraper class manages the simultaneous operation of several web scraping threads.
+ * The {@code Scraper} class manages the simultaneous operation of several web scraping threads.
  * It gathers individual scrapers and launches them simultaneously.
  */
 @Service

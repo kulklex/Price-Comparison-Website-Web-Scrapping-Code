@@ -17,6 +17,11 @@ public class AppConfig {
      */
     private final FirefoxWebDriverProvider webDriverProvider;
 
+    /**
+     * Constructs an {@code AppConfig} instance with the specified {@code FirefoxWebDriverProvider}.
+     *
+     * @param webDriverProvider The provider for obtaining WebDriver instances.
+     */
     public AppConfig(FirefoxWebDriverProvider webDriverProvider) {
         this.webDriverProvider =  webDriverProvider;
     }

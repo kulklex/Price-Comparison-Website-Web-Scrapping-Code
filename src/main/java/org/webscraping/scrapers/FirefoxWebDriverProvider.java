@@ -6,7 +6,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.springframework.stereotype.Component;
 
 /**
- * Implementation of {@link WebDriverProvider} that provides instances of a headless Firefox WebDriver.
+ * The {@code FirefoxWebDriverProvider} class is a class implementing {@link WebDriverProvider} that provides instances of a headless Firefox WebDriver.
  * This class is annotated with {@link Component} to indicate that it is a Spring component and can be
  * automatically discovered and registered by the Spring container.
  */
